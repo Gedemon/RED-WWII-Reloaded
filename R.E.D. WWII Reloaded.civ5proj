@@ -224,6 +224,9 @@
   <ItemGroup>
     <Folder Include="Art\" />
     <Folder Include="GameSetup\" />
+    <Folder Include="Lua" />
+    <Folder Include="Lua\Cseb\" />
+    <Folder Include="Lua\FlagPromotions\" />
     <Folder Include="Override\" />
     <Folder Include="Override\UI\" />
     <Folder Include="Override\Vanilla\" />
@@ -258,6 +261,30 @@
       <SubType>Lua</SubType>
       <ImportIntoVFS>False</ImportIntoVFS>
     </Content>
+    <Content Include="Lua\Cseb\csbmod_Common_PlotHelpers.lua">
+      <SubType>Lua</SubType>
+      <ImportIntoVFS>True</ImportIntoVFS>
+    </Content>
+    <Content Include="Lua\Cseb\csbmod_extplotinfo_Common.lua">
+      <SubType>Lua</SubType>
+      <ImportIntoVFS>True</ImportIntoVFS>
+    </Content>
+    <Content Include="Lua\Cseb\csbmod_extplotinfo_PlotHelp.lua">
+      <SubType>Lua</SubType>
+      <ImportIntoVFS>True</ImportIntoVFS>
+    </Content>
+    <Content Include="Lua\Cseb\csbmod_extplotinfo_PlotPopup.lua">
+      <SubType>Lua</SubType>
+      <ImportIntoVFS>True</ImportIntoVFS>
+    </Content>
+    <Content Include="Lua\FlagPromotions\ModUserData.lua">
+      <SubType>Lua</SubType>
+      <ImportIntoVFS>True</ImportIntoVFS>
+    </Content>
+    <Content Include="Lua\FlagPromotions\UnitFlagManager_addin.lua">
+      <SubType>Lua</SubType>
+      <ImportIntoVFS>True</ImportIntoVFS>
+    </Content>
     <Content Include="Override\UI\CityBannerManager.lua">
       <SubType>Lua</SubType>
       <ImportIntoVFS>False</ImportIntoVFS>
@@ -289,6 +316,10 @@
     <Content Include="Override\UI\EndGameMenu.lua">
       <SubType>Lua</SubType>
       <ImportIntoVFS>False</ImportIntoVFS>
+    </Content>
+    <Content Include="Override\UI\EnemyUnitPanel.lua">
+      <SubType>Lua</SubType>
+      <ImportIntoVFS>True</ImportIntoVFS>
     </Content>
     <Content Include="Override\UI\GameMenu.lua">
       <SubType>Lua</SubType>
@@ -324,7 +355,7 @@
     </Content>
     <Content Include="Override\UI\PlotHelpManager.lua">
       <SubType>Lua</SubType>
-      <ImportIntoVFS>False</ImportIntoVFS>
+      <ImportIntoVFS>True</ImportIntoVFS>
     </Content>
     <Content Include="Override\UI\PlotHelpText.lua">
       <SubType>Lua</SubType>
@@ -364,7 +395,7 @@
     </Content>
     <Content Include="Override\UI\UnitPanel.lua">
       <SubType>Lua</SubType>
-      <ImportIntoVFS>False</ImportIntoVFS>
+      <ImportIntoVFS>True</ImportIntoVFS>
     </Content>
     <Content Include="Override\Vanilla\Civilopedia\CivilopediaScreen.lua">
       <SubType>Lua</SubType>

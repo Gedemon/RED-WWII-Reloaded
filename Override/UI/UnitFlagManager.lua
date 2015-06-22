@@ -629,9 +629,9 @@ g_UnitFlagClass =  --@was: local -- Modified by Erendir
 			strStatus = strStatus .. Locale.ConvertTextKey("TXT_KEY_HOVERINFO_RANGE_STRIKE", pUnit:Range()) .. "  ";
 		end
 		
-		if pUnit:GetDamage() ~= 0 then
-			strStatus = strStatus .. Locale.ConvertTextKey("TXT_KEY_HOVERINFO_HEALTH", GameDefines.MAX_HIT_POINTS - pUnit:GetDamage()) .. "  ";
-		end
+		--if pUnit:GetDamage() ~= 0 then
+			strStatus = strStatus .. Locale.ConvertTextKey("TXT_KEY_HOVERINFO_HEALTH", pUnit:GetMaxHitPoints() - pUnit:GetDamage()) .. "  ";
+		--end
 
 		if strStatus ~= "" then
 			string = string .. "[NEWLINE]" .. strStatus

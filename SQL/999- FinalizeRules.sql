@@ -132,6 +132,9 @@ INSERT INTO Defines (Name, Value) VALUES ('LIBERATE_PLOT_CS_BONUS', 10);
 -- Edit tables for values checked in DLL code...
 --------------------------------------------------------------------------------------------
 
+/* Unit Max Hit Points */
+ALTER TABLE Units ADD COLUMN MaxHP integer DEFAULT '75';
+
 /* Unit Stack value, each unit has a weight, total weight on a plot can't exceed PLOT_UNIT_LIMIT */
 ALTER TABLE Units ADD COLUMN StackValue integer DEFAULT '60';
 
@@ -146,18 +149,34 @@ ALTER TABLE Units ADD COLUMN OnlySupportFire integer DEFAULT '0';
 -- Combat & Stacking rules...
 --------------------------------------------------------------------------------------------
 
+/* Max Hit Points */
+UPDATE Units SET MaxHP = 75 WHERE Domain = 'DOMAIN_AIR';
+
+UPDATE Units SET MaxHP = 200 WHERE Domain = 'DOMAIN_LAND';
+UPDATE Units SET MaxHP = 400 WHERE Domain = 'DOMAIN_LAND' AND (Class LIKE '%INFANTRY%') AND NOT (Class LIKE '%TANK%');
+UPDATE Units SET MaxHP = 75 WHERE Domain = 'DOMAIN_LAND' AND (Class LIKE '%TANK_DESTROYER%' OR Class LIKE '%ASSAULT_GUN%' OR Class LIKE '%ARTILLERY%' OR Class LIKE '%AA_GUN%' OR Class LIKE '%ANTI_AIRCRAFT_GUN%' OR Class LIKE '%FIELD_GUN%');
+UPDATE Units SET MaxHP = 45 WHERE Domain = 'DOMAIN_LAND' AND (Class LIKE '%HEAVY%');
+UPDATE Units SET MaxHP = 10 WHERE Domain = 'DOMAIN_LAND' AND (Class LIKE '%SPECIAL_FORCES%');
+
+UPDATE Units SET MaxHP = 75 WHERE Domain = 'DOMAIN_SEA';
+
+/* Combat Limit */
+UPDATE Units SET CombatLimit		= 0; -- melee combat limit, if set to 50 this unit can't attack an enemy unit that would have more than 50 damage point after the combat.
+UPDATE Units SET RangedCombatLimit	= 0; -- same, for ranged attack.
+
 /* Stack Value */
 UPDATE Units SET StackValue = 30 WHERE Domain = 'DOMAIN_AIR';
 UPDATE Units SET StackValue = 10 WHERE Domain = 'DOMAIN_AIR' AND (Class LIKE '%FIGHTER%' OR Class LIKE '%ATTACK_AIRCRAFT%' OR Class LIKE '%NAVY_BOMBER%' OR Class LIKE '%TORPEDO_BOMBER%');
 UPDATE Units SET StackValue = 20 WHERE Domain = 'DOMAIN_AIR' AND (Class LIKE '%LIGHT_BOMBER%' OR Class LIKE '%NAVY_LIGHT_BOMBER%' OR Class LIKE '%FAST_BOMBER%' OR Class LIKE '%JET_BOMBER%');
 
-UPDATE Units SET StackValue = 66 WHERE Domain = 'DOMAIN_LAND';
-UPDATE Units SET StackValue = 33 WHERE Domain = 'DOMAIN_LAND' AND (Class LIKE '%TANK_DESTROYER%' OR Class LIKE '%ASSAULT_GUN%' OR Class LIKE '%ARTILLERY%' OR Class LIKE '%AA_GUN%' OR Class LIKE '%ANTI_AIRCRAFT_GUN%' OR Class LIKE '%FIELD_GUN%');
+UPDATE Units SET StackValue = 60 WHERE Domain = 'DOMAIN_LAND';
+UPDATE Units SET StackValue = 30 WHERE Domain = 'DOMAIN_LAND' AND (Class LIKE '%TANK_DESTROYER%' OR Class LIKE '%ASSAULT_GUN%' OR Class LIKE '%ARTILLERY%' OR Class LIKE '%AA_GUN%' OR Class LIKE '%ANTI_AIRCRAFT_GUN%' OR Class LIKE '%FIELD_GUN%');
+UPDATE Units SET StackValue = 39 WHERE Domain = 'DOMAIN_LAND' AND (Class LIKE '%HEAVY%');
 UPDATE Units SET StackValue = 20 WHERE Domain = 'DOMAIN_LAND' AND (Class LIKE '%SPECIAL_FORCES%');
 
-UPDATE Units SET StackValue = 66 WHERE Domain = 'DOMAIN_SEA';
-UPDATE Units SET StackValue = 49 WHERE Domain = 'DOMAIN_SEA' AND (Class LIKE '%CRUISER%');
-UPDATE Units SET StackValue = 33 WHERE Domain = 'DOMAIN_SEA' AND (Class LIKE '%DESTROYER%' OR Class LIKE '%SUBMARINE%');
+UPDATE Units SET StackValue = 60 WHERE Domain = 'DOMAIN_SEA';
+UPDATE Units SET StackValue = 39 WHERE Domain = 'DOMAIN_SEA' AND (Class LIKE '%CRUISER%');
+UPDATE Units SET StackValue = 30 WHERE Domain = 'DOMAIN_SEA' AND (Class LIKE '%DESTROYER%' OR Class LIKE '%SUBMARINE%');
 UPDATE Units SET StackValue = 20 WHERE Domain = 'DOMAIN_SEA' AND (Class LIKE '%CONVOY%');
 
 /* Support Fire Only classes (can't do normal ranged attack) */
@@ -179,7 +198,7 @@ UPDATE Units SET CounterFire = 1 WHERE CombatClass = 'UNITCOMBAT_SIEGE' OR Comba
 --------------------------------------------------------------------------------------------
 -- Combat damages --
 --------------------------------------------------------------------------------------------
-UPDATE Defines SET Value = 50		WHERE Name = 'COMBAT_DAMAGE';											-- default = 20
+UPDATE Defines SET Value = 15		WHERE Name = 'COMBAT_DAMAGE';											-- default = 20
 UPDATE Defines SET Value = 1200		WHERE Name = 'ATTACK_SAME_STRENGTH_MIN_DAMAGE';							-- default = 2400
 UPDATE Defines SET Value = 2400		WHERE Name = 'ATTACK_SAME_STRENGTH_POSSIBLE_EXTRA_DAMAGE';				-- default = 1200
 UPDATE Defines SET Value = 1200		WHERE Name = 'RANGE_ATTACK_SAME_STRENGTH_MIN_DAMAGE';					-- default = 2400

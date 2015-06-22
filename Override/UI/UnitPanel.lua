@@ -19,7 +19,7 @@ local g_PromotionsOpen = false;
 local g_SecondaryOpen = false;
 local g_WorkerActionPanelOpen = false;
 
-local MaxDamage = GameDefines.MAX_HIT_POINTS;
+--local MaxDamage = GameDefines.MAX_HIT_POINTS;
 
 local promotionsTexture = "Promotions512.dds";
 
@@ -719,6 +719,7 @@ end
 function UpdateUnitHealthBar(unit)
 	-- note that this doesn't use the bar type
 	local damage = unit:GetDamage();
+	local MaxDamage = unit:GetMaxHitPoints();
 	if damage == 0 then
 		Controls.HealthBar:SetHide(true);	
 	else	
