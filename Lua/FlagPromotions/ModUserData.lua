@@ -2,11 +2,13 @@
 -- Author: Erendir
 -- DateCreated: 1/23/2011 12:36:56 PM
 --------------------------------------------------------------
+include("RED_Version")
+
 local _VERBOSE = false
 local print
 if not _VERBOSE then print = function() end end
 
-ModID		= "580c14eb-9799-4d31-8b14-c2a78931de89";
+ModID		= g_RED_WWII_ID;
 ModVersion	= Modding.GetActivatedModVersion(ModID);
 ModUserData = Modding.OpenUserData(ModID, ModVersion);
 

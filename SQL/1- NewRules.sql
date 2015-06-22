@@ -107,20 +107,20 @@ UPDATE UnitPromotions_Domains SET Modifier = 5  WHERE PromotionType = 'PROMOTION
 -- Game Defines
 --------------------------------------------------------------------------------------------
 
+UPDATE Defines SET Value = 3		WHERE Name = 'BONUS_PER_ADJACENT_FRIEND'; -- flancking bonus (default 10)
+UPDATE Defines SET Value = 150		WHERE Name = 'MAX_HIT_POINTS'; 
+UPDATE Defines SET Value = 150		WHERE Name = 'MAX_CITY_HIT_POINTS';
+UPDATE Defines SET Value = 3		WHERE Name = 'RECON_VISIBILITY_RANGE';
 UPDATE Defines SET Value = 0		WHERE Name = 'CITY_ATTACK_RANGE';
 UPDATE Defines SET Value = -33		WHERE Name = 'RIVER_ATTACK_MODIFIER'; -- default -20
 UPDATE Defines SET Value = -50		WHERE Name = 'AMPHIB_ATTACK_MODIFIER'; -- default -50
 UPDATE Defines SET Value = 1		WHERE Name = 'UNIT_MAINTENANCE_GAME_MULTIPLIER';
-UPDATE Defines SET Value = 3		WHERE Name = 'RECON_VISIBILITY_RANGE';
 UPDATE Defines SET Value = 15000	WHERE Name = 'BASE_CITY_GROWTH_THRESHOLD';
 UPDATE Defines SET Value = 80		WHERE Name = 'CITY_GROWTH_MULTIPLIER';
 UPDATE Defines SET Value = 0		WHERE Name = 'FOOD_CONSUMPTION_PER_POPULATION';
 UPDATE Defines SET Value = 100		WHERE Name = 'CITY_CAPTURE_POPULATION_PERCENT';
 UPDATE Defines SET Value = 1500		WHERE Name = 'CULTURE_COST_FIRST_PLOT';
 UPDATE Defines SET Value = 2500		WHERE Name = 'PLOT_BASE_COST';
-UPDATE Defines SET Value = 3		WHERE Name = 'BONUS_PER_ADJACENT_FRIEND'; -- flancking bonus (default 10)
-UPDATE Defines SET Value = 250		WHERE Name = 'MAX_HIT_POINTS'; -- Absolute MaxHP to set at 100 if per units maxHP could be achieved
-UPDATE Defines SET Value = 50		WHERE Name = 'MAX_CITY_HIT_POINTS';
 UPDATE Defines SET Value = 0		WHERE Name = 'ENEMY_HEAL_RATE';
 UPDATE Defines SET Value = 0		WHERE Name = 'NEUTRAL_HEAL_RATE';
 UPDATE Defines SET Value = 0		WHERE Name = 'FRIENDLY_HEAL_RATE';

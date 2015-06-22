@@ -128,12 +128,16 @@ INSERT INTO Defines (Name, Value) VALUES ('CITY_AIR_UNIT_LIMIT', 150);
 /* Bonus when liberating a minor civ territory */
 INSERT INTO Defines (Name, Value) VALUES ('LIBERATE_PLOT_CS_BONUS', 10);
 
+/* Damage Limit */
+INSERT INTO Defines (Name, Value) VALUES ('MAX_HP_PERCENT_RECEIVED_DAMAGE', 20);	-- Can't receive more than 20% of (our) Max Hit Points in a combat.
+INSERT INTO Defines (Name, Value) VALUES ('MAX_HP_PERCENT_INFLICTED_DAMAGE', 100);	-- Can't inflict more than 100% of (our) Max Hit Points in a combat.
+
 --------------------------------------------------------------------------------------------
 -- Edit tables for values checked in DLL code...
 --------------------------------------------------------------------------------------------
 
 /* Unit Max Hit Points */
-ALTER TABLE Units ADD COLUMN MaxHP integer DEFAULT '75';
+ALTER TABLE Units ADD COLUMN MaxHP integer DEFAULT '150';
 
 /* Unit Stack value, each unit has a weight, total weight on a plot can't exceed PLOT_UNIT_LIMIT */
 ALTER TABLE Units ADD COLUMN StackValue integer DEFAULT '60';
@@ -161,8 +165,8 @@ UPDATE Units SET MaxHP = 10 WHERE Domain = 'DOMAIN_LAND' AND (Class LIKE '%SPECI
 UPDATE Units SET MaxHP = 75 WHERE Domain = 'DOMAIN_SEA';
 
 /* Combat Limit */
-UPDATE Units SET CombatLimit		= 0; -- melee combat limit, if set to 50 this unit can't attack an enemy unit that would have more than 50 damage point after the combat.
-UPDATE Units SET RangedCombatLimit	= 0; -- same, for ranged attack.
+UPDATE Units SET CombatLimit		= 500 WHERE CombatLimit > 0;		-- melee combat limit, if set to 50 this unit can't attack an enemy unit that would have more than 50 damage point after the combat.
+UPDATE Units SET RangedCombatLimit	= 500 WHERE RangedCombatLimit > 0;	-- same, for ranged attack.
 
 /* Stack Value */
 UPDATE Units SET StackValue = 30 WHERE Domain = 'DOMAIN_AIR';
@@ -196,16 +200,16 @@ UPDATE Units SET CounterFire = 1 WHERE CombatClass = 'UNITCOMBAT_SIEGE' OR Comba
 
 
 --------------------------------------------------------------------------------------------
--- Combat damages --
+-- Combat damage --
 --------------------------------------------------------------------------------------------
-UPDATE Defines SET Value = 15		WHERE Name = 'COMBAT_DAMAGE';											-- default = 20
-UPDATE Defines SET Value = 1200		WHERE Name = 'ATTACK_SAME_STRENGTH_MIN_DAMAGE';							-- default = 2400
-UPDATE Defines SET Value = 2400		WHERE Name = 'ATTACK_SAME_STRENGTH_POSSIBLE_EXTRA_DAMAGE';				-- default = 1200
+UPDATE Defines SET Value = 10		WHERE Name = 'COMBAT_DAMAGE';											-- default = 20
+UPDATE Defines SET Value = 1800		WHERE Name = 'ATTACK_SAME_STRENGTH_MIN_DAMAGE';							-- default = 2400
+UPDATE Defines SET Value = 1200		WHERE Name = 'ATTACK_SAME_STRENGTH_POSSIBLE_EXTRA_DAMAGE';				-- default = 1200
 UPDATE Defines SET Value = 1200		WHERE Name = 'RANGE_ATTACK_SAME_STRENGTH_MIN_DAMAGE';					-- default = 2400
-UPDATE Defines SET Value = 2400		WHERE Name = 'RANGE_ATTACK_SAME_STRENGTH_POSSIBLE_EXTRA_DAMAGE';		-- default = 1200
-UPDATE Defines SET Value = 1200		WHERE Name = 'AIR_STRIKE_SAME_STRENGTH_MIN_DEFENSE_DAMAGE';				-- default = 2400
-UPDATE Defines SET Value = 2400		WHERE Name = 'AIR_STRIKE_SAME_STRENGTH_POSSIBLE_EXTRA_DEFENSE_DAMAGE';	-- default = 1200
-UPDATE Defines SET Value = 1200		WHERE Name = 'INTERCEPTION_SAME_STRENGTH_MIN_DAMAGE';					-- default = 2400
-UPDATE Defines SET Value = 2400		WHERE Name = 'INTERCEPTION_SAME_STRENGTH_POSSIBLE_EXTRA_DAMAGE';		-- default = 1200
+UPDATE Defines SET Value = 800		WHERE Name = 'RANGE_ATTACK_SAME_STRENGTH_POSSIBLE_EXTRA_DAMAGE';		-- default = 1200
+UPDATE Defines SET Value = 1600		WHERE Name = 'AIR_STRIKE_SAME_STRENGTH_MIN_DEFENSE_DAMAGE';				-- default = 2400
+UPDATE Defines SET Value = 900		WHERE Name = 'AIR_STRIKE_SAME_STRENGTH_POSSIBLE_EXTRA_DEFENSE_DAMAGE';	-- default = 1200
+UPDATE Defines SET Value = 1800		WHERE Name = 'INTERCEPTION_SAME_STRENGTH_MIN_DAMAGE';					-- default = 2400
+UPDATE Defines SET Value = 1200		WHERE Name = 'INTERCEPTION_SAME_STRENGTH_POSSIBLE_EXTRA_DAMAGE';		-- default = 1200
 UPDATE Defines SET Value = 100		WHERE Name = 'CITY_ATTACKING_DAMAGE_MOD';								-- default = 100
 UPDATE Defines SET Value = 200		WHERE Name = 'ATTACKING_CITY_MELEE_DAMAGE_MOD';							-- default = 100

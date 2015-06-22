@@ -116,14 +116,17 @@ function GetOwnerString(pPlot)
 	end
 
 	-- old owner
-	--[[
-	plotKey = GetPlotKey ( pPlot )
-	firstOwner = GetPlotFirstOwner( plotKey )
+	---[[
+	local firstOwner = pPlot:GetOriginalOwner()
 	if (firstOwner ~= -1) and (firstOwner ~= pPlot:GetOwner()) then
 		local strAdjective = Players[firstOwner]:GetCivilizationAdjective()
 		strResult = strResult .. "Captured ".. strAdjective .." territory[NEWLINE]"
 	end
 	--]]
+	
+	if (firstOwner == -1) and (firstOwner ~= pPlot:GetOwner()) then
+		strResult = strResult .. "Debug : No First Owner for an owned plot ![NEWLINE]"
+	end
 
 	-- City here?
 	if (pPlot:IsCity()) then
