@@ -54,12 +54,12 @@
       <Action>
         <Set>OnModActivated</Set>
         <Type>UpdateDatabase</Type>
-        <FileName>SQL/0- ReplaceCivilizations.sql</FileName>
+        <FileName>SQL/00- ReplaceCivilizations.sql</FileName>
       </Action>
       <Action>
         <Set>OnModActivated</Set>
         <Type>UpdateDatabase</Type>
-        <FileName>SQL/1- NewRules.sql</FileName>
+        <FileName>SQL/01- NewRules.sql</FileName>
       </Action>
       <Action>
         <Set>OnModActivated</Set>
@@ -99,7 +99,7 @@
       <Action>
         <Set>OnModActivated</Set>
         <Type>UpdateDatabase</Type>
-        <FileName>SQL/1- DeleteDefaultCityState.sql</FileName>
+        <FileName>SQL/01- DeleteDefaultCityState.sql</FileName>
       </Action>
       <Action>
         <Set>OnModActivated</Set>
@@ -149,37 +149,37 @@
       <Action>
         <Set>OnModActivated</Set>
         <Type>UpdateDatabase</Type>
-        <FileName>SQL/2- Create Initialization Table.sql</FileName>
+        <FileName>SQL/02- Create Initialization Table.sql</FileName>
       </Action>
       <Action>
         <Set>OnModActivated</Set>
         <Type>UpdateDatabase</Type>
-        <FileName>SQL/3- Define Original Units.sql</FileName>
+        <FileName>SQL/03- Define Original Units.sql</FileName>
       </Action>
       <Action>
         <Set>OnModActivated</Set>
         <Type>UpdateDatabase</Type>
-        <FileName>SQL/4- Define Class Template Units.sql</FileName>
+        <FileName>SQL/04- Define Class Template Units.sql</FileName>
       </Action>
       <Action>
         <Set>OnModActivated</Set>
         <Type>UpdateDatabase</Type>
-        <FileName>SQL/5- Define Subclass Template Units.sql</FileName>
+        <FileName>SQL/05- Define Subclass Template Units.sql</FileName>
       </Action>
       <Action>
         <Set>OnModActivated</Set>
         <Type>UpdateDatabase</Type>
-        <FileName>SQL/6- Define New Units.sql</FileName>
+        <FileName>SQL/06- Define New Units.sql</FileName>
       </Action>
       <Action>
         <Set>OnModActivated</Set>
         <Type>UpdateDatabase</Type>
-        <FileName>SQL/7- Update New Units Table.sql</FileName>
+        <FileName>SQL/07- Update New Units Table.sql</FileName>
       </Action>
       <Action>
         <Set>OnModActivated</Set>
         <Type>UpdateDatabase</Type>
-        <FileName>SQL/8- NewImprovements.sql</FileName>
+        <FileName>SQL/08- NewImprovements.sql</FileName>
       </Action>
       <Action>
         <Set>OnModActivated</Set>
@@ -200,6 +200,11 @@
         <Set>OnGetDLLPath</Set>
         <Type>SetDllPath</Type>
         <FileName>CvGameCore_RED.dll</FileName>
+      </Action>
+      <Action>
+        <Set>OnModActivated</Set>
+        <Type>UpdateDatabase</Type>
+        <FileName>SQL/20- Define RED.sql</FileName>
       </Action>
     </ModActions>
     <ModProperties>
@@ -449,43 +454,47 @@
       <SubType>Lua</SubType>
       <ImportIntoVFS>False</ImportIntoVFS>
     </Content>
-    <Content Include="SQL\0- ReplaceCivilizations.sql">
+    <Content Include="SQL\00- ReplaceCivilizations.sql">
       <SubType>Lua</SubType>
       <ImportIntoVFS>False</ImportIntoVFS>
     </Content>
-    <Content Include="SQL\1- DeleteDefaultCityState.sql">
+    <Content Include="SQL\01- DeleteDefaultCityState.sql">
       <SubType>Lua</SubType>
       <ImportIntoVFS>False</ImportIntoVFS>
     </Content>
-    <Content Include="SQL\1- NewRules.sql">
+    <Content Include="SQL\01- NewRules.sql">
       <SubType>Lua</SubType>
       <ImportIntoVFS>False</ImportIntoVFS>
     </Content>
-    <Content Include="SQL\2- Create Initialization Table.sql">
+    <Content Include="SQL\02- Create Initialization Table.sql">
       <SubType>Lua</SubType>
       <ImportIntoVFS>False</ImportIntoVFS>
     </Content>
-    <Content Include="SQL\3- Define Original Units.sql">
+    <Content Include="SQL\20- Define RED.sql">
       <SubType>Lua</SubType>
       <ImportIntoVFS>False</ImportIntoVFS>
     </Content>
-    <Content Include="SQL\4- Define Class Template Units.sql">
+    <Content Include="SQL\03- Define Original Units.sql">
       <SubType>Lua</SubType>
       <ImportIntoVFS>False</ImportIntoVFS>
     </Content>
-    <Content Include="SQL\5- Define Subclass Template Units.sql">
+    <Content Include="SQL\04- Define Class Template Units.sql">
       <SubType>Lua</SubType>
       <ImportIntoVFS>False</ImportIntoVFS>
     </Content>
-    <Content Include="SQL\6- Define New Units.sql">
+    <Content Include="SQL\05- Define Subclass Template Units.sql">
       <SubType>Lua</SubType>
       <ImportIntoVFS>False</ImportIntoVFS>
     </Content>
-    <Content Include="SQL\7- Update New Units Table.sql">
+    <Content Include="SQL\06- Define New Units.sql">
       <SubType>Lua</SubType>
       <ImportIntoVFS>False</ImportIntoVFS>
     </Content>
-    <Content Include="SQL\8- NewImprovements.sql">
+    <Content Include="SQL\07- Update New Units Table.sql">
+      <SubType>Lua</SubType>
+      <ImportIntoVFS>False</ImportIntoVFS>
+    </Content>
+    <Content Include="SQL\08- NewImprovements.sql">
       <SubType>Lua</SubType>
       <ImportIntoVFS>False</ImportIntoVFS>
     </Content>

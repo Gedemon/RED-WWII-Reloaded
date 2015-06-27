@@ -111,9 +111,9 @@ function GetOwnerString(pPlot)
 	local pTeam = Teams[iActiveTeam];
 	local bIsDebug = Game.IsDebugMode();
 	
-	if DEBUG_SHOW_PLOT_XY then
-		strResult = strResult .. "Debug : Plot (".. pPlot:GetX() .."," .. pPlot:GetY()..")[NEWLINE]"
-	end
+	--if DEBUG_SHOW_PLOT_XY then
+		strResult = strResult .. "Debug : Plot (".. pPlot:GetX() .."," .. pPlot:GetY()..") / Area = " .. tostring(pPlot:GetArea()) .."[NEWLINE]"
+	--end
 
 	-- old owner
 	---[[
@@ -123,10 +123,6 @@ function GetOwnerString(pPlot)
 		strResult = strResult .. "Captured ".. strAdjective .." territory[NEWLINE]"
 	end
 	--]]
-	
-	if (firstOwner == -1) and (firstOwner ~= pPlot:GetOwner()) then
-		strResult = strResult .. "Debug : No First Owner for an owned plot ![NEWLINE]"
-	end
 
 	-- City here?
 	if (pPlot:IsCity()) then
@@ -158,6 +154,10 @@ function GetOwnerString(pPlot)
 			end
 		end
 	end
+
+	-- add <controlledBy> tag to plot	
+	local strControl = pPlot:GetControlString()
+	strResult = strResult .."[NEWLINE]" .. strControl
 	
 	return strResult;
 end

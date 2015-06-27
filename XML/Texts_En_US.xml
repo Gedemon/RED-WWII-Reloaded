@@ -500,7 +500,30 @@
 		<Replace Tag="TXT_KEY_MISC_LIBERATE_MINOR_PLOT_BONUS">
 			<Text>You gain [COLOR_POSITIVE_TEXT]{1_Num}[ENDCOLOR] [ICON_INFLUENCE] with {@2_MinorCivName} from liberating it's territory.</Text>
 		</Replace>
-		
+
+		<Replace Tag="TXT_KEY_PLOT_UNKNOWN_CONTROL">
+			<Text>No control found.</Text>
+		</Replace>
+		<Replace Tag="TXT_KEY_PLOT_NO_CONTROL">
+			<Text>Not controlled by any unit/city.</Text>
+		</Replace>
+		<Replace Tag="TXT_KEY_PLOT_ORIGINAL_OWNER_CONTROL">
+			<Text>Under control of original owner.</Text>
+		</Replace>
+		<Replace Tag="TXT_KEY_PLOT_UNIT_CONTROL">
+			<Text>In control range of [ICON_STRENGTH] {@1_UnitName}.</Text>
+		</Replace>
+		<Replace Tag="TXT_KEY_PLOT_CITY_CONTROL">
+			<Text>In control range of [ICON_CITY_STATE] {@1_CitytName}.</Text>
+		</Replace>
+		<Replace Tag="TXT_KEY_PLOT_CONTROL_LOST">
+			<Text>[COLOR_NEGATIVE_TEXT]Control lost ![ENDCOLOR]</Text>
+		</Replace>
+		<Replace Tag="TXT_KEY_PLOT_CONTROL_GAINED">
+			<Text>[COLOR_POSITIVE_TEXT]Control gained ![ENDCOLOR]</Text>
+		</Replace>
+
+
 		<!-- Impassable Features for closed borders -->
 		<Row Tag="TXT_KEY_FEATURE_CLOSED_BORDER">
 			<Text>Closed Borders</Text>

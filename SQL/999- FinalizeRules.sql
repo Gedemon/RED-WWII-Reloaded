@@ -125,9 +125,6 @@ INSERT INTO Defines (Name, Value) VALUES ('CITY_LAND_UNIT_LIMIT', 200);
 INSERT INTO Defines (Name, Value) VALUES ('CITY_SEA_UNIT_LIMIT', 200);
 INSERT INTO Defines (Name, Value) VALUES ('CITY_AIR_UNIT_LIMIT', 150);
 
-/* Bonus when liberating a minor civ territory */
-INSERT INTO Defines (Name, Value) VALUES ('LIBERATE_PLOT_CS_BONUS', 10);
-
 /* Damage Limit */
 INSERT INTO Defines (Name, Value) VALUES ('MAX_HP_PERCENT_RECEIVED_DAMAGE', 20);	-- Can't receive more than 20% of (our) Max Hit Points in a combat.
 INSERT INTO Defines (Name, Value) VALUES ('MAX_HP_PERCENT_INFLICTED_DAMAGE', 100);	-- Can't inflict more than 100% of (our) Max Hit Points in a combat.
@@ -141,6 +138,9 @@ ALTER TABLE Units ADD COLUMN MaxHP integer DEFAULT '150';
 
 /* Unit Stack value, each unit has a weight, total weight on a plot can't exceed PLOT_UNIT_LIMIT */
 ALTER TABLE Units ADD COLUMN StackValue integer DEFAULT '60';
+
+/* Unit Capture Territory */
+ALTER TABLE Units ADD COLUMN CanCaptureTerritory integer DEFAULT '1';
 
 /* First strike capabilities (the unit must also have ranged attack capability) */
 ALTER TABLE Units ADD COLUMN OffensiveSupportFire integer DEFAULT '0';
@@ -163,6 +163,11 @@ UPDATE Units SET MaxHP = 45 WHERE Domain = 'DOMAIN_LAND' AND (Class LIKE '%HEAVY
 UPDATE Units SET MaxHP = 10 WHERE Domain = 'DOMAIN_LAND' AND (Class LIKE '%SPECIAL_FORCES%');
 
 UPDATE Units SET MaxHP = 75 WHERE Domain = 'DOMAIN_SEA';
+
+/* Capture territory */
+UPDATE Units SET CanCaptureTerritory = 0 WHERE Domain = 'DOMAIN_SEA';
+UPDATE Units SET CanCaptureTerritory = 0 WHERE Domain = 'DOMAIN_AIR';
+UPDATE Units SET CanCaptureTerritory = 0 WHERE Domain = 'DOMAIN_LAND' AND (Class LIKE '%SPECIAL_FORCES%' OR Class LIKE '%ARTILLERY%' OR Class LIKE '%AA_GUN%' OR Class LIKE '%ANTI_AIRCRAFT_GUN%' OR Class LIKE '%FIELD_GUN%');
 
 /* Combat Limit */
 UPDATE Units SET CombatLimit		= 500 WHERE CombatLimit > 0;		-- melee combat limit, if set to 50 this unit can't attack an enemy unit that would have more than 50 damage point after the combat.
