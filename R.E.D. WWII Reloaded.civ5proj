@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Default</Configuration>
     <ProjectGuid>{afbca851-b16b-462f-bbc1-3aac8a9e6dc5}</ProjectGuid>
     <Name>R.E.D. WWII Reloaded</Name>
-    <Guid>e3cc2818-6fea-40fb-a163-a13957ae93f3</Guid>
+    <Guid>580c14eb-9799-4d31-8b14-c2a78931de89</Guid>
     <ModVersion>1</ModVersion>
     <Stability>Alpha</Stability>
     <Teaser>R.E.D. WWII Reloaded</Teaser>
@@ -24,13 +24,6 @@
     <ReloadLandmarkSystem>true</ReloadLandmarkSystem>
     <ReloadStrategicViewSystem>true</ReloadStrategicViewSystem>
     <ModBlockers>
-      <Association xmlns="">
-        <Type>Mod</Type>
-        <Name>R.E.D. WWII Edition</Name>
-        <Id>580c14eb-9799-4d31-8b14-c2a78931de89</Id>
-        <MinVersion>0</MinVersion>
-        <MaxVersion>999</MaxVersion>
-      </Association>
     </ModBlockers>
     <ModDependencies>
       <Association xmlns="">

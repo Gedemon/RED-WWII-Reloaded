@@ -620,6 +620,7 @@ function UpdateCombatOddsUnitVsUnit(pMyUnit, pTheirUnit)
 			local iMyDamageInflicted = 0;
 			local iTheirDamageInflicted = 0;
 			local iTheirFireSupportCombatDamage = 0;
+			local iMyFireSupportCombatDamage = 0;
 			
 			-- Ranged Strike
 			if (bRanged) then
@@ -631,11 +632,20 @@ function UpdateCombatOddsUnitVsUnit(pMyUnit, pTheirUnit)
 					iTheirStrength = pTheirUnit:GetMaxDefenseStrength(pToPlot, pMyUnit, true);
 				end
 				
+				-- RED <<<<<
+				local pFireSupportUnit = pMyUnit:GetCounterFireUnit(pTheirUnit:GetOwner(), pToPlot:GetX(), pToPlot:GetY());
+				if (pFireSupportUnit ~= nil) then
+					iTheirFireSupportCombatDamage = pFireSupportUnit:GetRangeCombatDamage(pMyUnit, nil, false);
+				end
+				-- RED >>>>>
+				
 				if (pMyUnit:GetDomainType() == DomainTypes.DOMAIN_AIR) then
 					iTheirDamageInflicted = pTheirUnit:GetAirStrikeDefenseDamage(pMyUnit, false);				
 					iNumVisibleAAUnits = pMyUnit:GetInterceptorCount(pToPlot, pTheirUnit, true, true);		
 					bInterceptPossible = true;
 				end
+
+				iTheirDamageInflicted = iTheirDamageInflicted + iTheirFireSupportCombatDamage;
 				
 			-- Normal Melee Combat
 			else
@@ -647,8 +657,14 @@ function UpdateCombatOddsUnitVsUnit(pMyUnit, pTheirUnit)
 					iTheirFireSupportCombatDamage = pFireSupportUnit:GetRangeCombatDamage(pMyUnit, nil, false);
 				end
 				
+				local pOffensiveFireSupportUnit = pTheirUnit:GetOffensiveSupportFireUnit(pMyUnit:GetOwner(), pFromPlot:GetX(), pFromPlot:GetY());
+				if (pOffensiveFireSupportUnit ~= nil) then
+					iMyFireSupportCombatDamage = pOffensiveFireSupportUnit:GetRangeCombatDamage(pTheirUnit, nil, false);
+				end
+				
 				iMyDamageInflicted = pMyUnit:GetCombatDamage(iMyStrength, iTheirStrength, pMyUnit:GetDamage() + iTheirFireSupportCombatDamage, false, false, false, pTheirUnit:GetMaxHitPoints());
-				iTheirDamageInflicted = pTheirUnit:GetCombatDamage(iTheirStrength, iMyStrength, pTheirUnit:GetDamage(), false, false, false, pMyUnit:GetMaxHitPoints());
+				iMyDamageInflicted =  iMyDamageInflicted + iMyFireSupportCombatDamage;
+				iTheirDamageInflicted = pTheirUnit:GetCombatDamage(iTheirStrength, iMyStrength, pTheirUnit:GetDamage() + iMyFireSupportCombatDamage, false, false, false, pMyUnit:GetMaxHitPoints());
 				iTheirDamageInflicted = iTheirDamageInflicted + iTheirFireSupportCombatDamage;
 				
 			end

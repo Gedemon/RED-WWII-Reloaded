@@ -17,7 +17,8 @@ function GetUnitsString(pPlot)
 	local pTeam = Teams[iActiveTeam];
 	local bIsDebug = Game.IsDebugMode();
 	local bFirstEntry = true;
-	
+	local iStackWeight = 0;
+
 	-- Loop through all units
 	local numUnits = pPlot:GetNumUnits();
 	for i = 0, numUnits do
@@ -52,11 +53,11 @@ function GetUnitsString(pPlot)
 			
 			local unitTeam = unit:GetTeam();
 			if iActiveTeam == unitTeam then
-				strResult = "[COLOR_WHITE]" .. strResult .. "[ENDCOLOR]";
+				strResult = "[COLOR_POSITIVE_TEXT]" .. strResult .. "[ENDCOLOR]";
 			elseif pTeam:IsAtWar(unitTeam) then
 				strResult = "[COLOR_NEGATIVE_TEXT]" .. strResult .. "[ENDCOLOR]";
-			--else
-			--	strResult = "[COLOR_POSITIVE_TEXT]" .. strResult .. "[ENDCOLOR]";
+			else
+				strResult = "[COLOR_WHITE]" .. strResult .. "[ENDCOLOR]";
 			end
 			
 			-- Debug stuff
@@ -75,7 +76,7 @@ function GetUnitsString(pPlot)
 			
 			-- Hit Points
 			--if (unit:GetDamage() > 0) then
-			--	strResult = strResult .. ", " .. Locale.ConvertTextKey("TXT_KEY_PLOTROLL_UNIT_HP", unit:GetMaxHitPoints() - unit:GetDamage());
+				strResult = strResult .. ", " .. Locale.ConvertTextKey("TXT_KEY_PLOTROLL_UNIT_HP", unit:GetMaxHitPoints() - unit:GetDamage());
 			--end
 			
 			-- Embarked?
@@ -90,12 +91,18 @@ function GetUnitsString(pPlot)
 			
 			if unit:FortifyModifier() > 0 then
 				local leftToMax = math.max(0, GameDefines.MAX_FORTIFY_TURNS - unit:GetFortifyTurns())
-				strResult = strResult .. "[NEWLINE]" .. Locale.ConvertTextKey("TXT_KEY_HOVERINFO_FORTIFIED", unit:FortifyModifier(), leftToMax);
+				strResult = strResult .. "[NEWLINE]    " .. Locale.ConvertTextKey("TXT_KEY_HOVERINFO_FORTIFIED", unit:FortifyModifier(), leftToMax);
 			end
+
+			iStackWeight = iStackWeight + unit:GetStackValue()
 
 		end			
 	end	
 	
+	if iStackWeight > 0 then
+		local fillingPercentage = (iStackWeight / GameDefines.PLOT_UNIT_LIMIT * 100)
+		strResult = strResult .. "[NEWLINE]" .. Locale.ConvertTextKey("TXT_KEY_HOVERINFO_FILLING_PERCENTAGE", fillingPercentage);
+	end
 	return strResult;
 
 end
@@ -146,11 +153,11 @@ function GetOwnerString(pPlot)
 			local iActiveTeam = Game.GetActiveTeam();
 			local plotTeam = pPlayer:GetTeam();
 			if iActiveTeam == plotTeam then
-				strResult = "[COLOR_WHITE]" .. strResult .. "[ENDCOLOR]";
+				strResult = "[COLOR_POSITIVE_TEXT]" .. strResult .. "[ENDCOLOR]";
 			elseif pTeam:IsAtWar(plotTeam) then
 				strResult = "[COLOR_NEGATIVE_TEXT]" .. strResult .. "[ENDCOLOR]";
 			else
-				strResult = "[COLOR_POSITIVE_TEXT]" .. strResult .. "[ENDCOLOR]";
+				strResult = "[COLOR_WHITE]" .. strResult .. "[ENDCOLOR]";
 			end
 		end
 	end

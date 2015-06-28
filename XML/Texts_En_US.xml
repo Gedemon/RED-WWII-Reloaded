@@ -158,14 +158,35 @@
 			<Text>Your {@1_UnitName} was able to provide [COLOR_POSITIVE_TEXT]Preparation Fire[ENDCOLOR] for your {@2_EnUName} attack!</Text>
 		</Row>
 		<Row Tag="TXT_KEY_MISC_ENEMY_GET_OFFENSIVE_SUPPORT">
-			<Text>An enemy {@1_UnitName} was able to provide [COLOR_NEGATIVE_TEXT]Preparation Fire[ENDCOLOR] for his {@2_EnUName} attack!</Text>
+			<Text>The enemy {@1_UnitName} was able to provide [COLOR_NEGATIVE_TEXT]Preparation Fire[ENDCOLOR] for his {@2_EnUName} attack!</Text>
 		</Row>
 		
 		<Row Tag="TXT_KEY_MISC_ENEMY_GET_DEFENSIVE_SUPPORT">
-			<Text>An enemy {@1_UnitName} was able to provide [COLOR_NEGATIVE_TEXT]Counter-Preparation Fire[ENDCOLOR] against your {@2_EnUName} attack!</Text>
+			<Text>The enemy {@1_UnitName} was able to provide [COLOR_NEGATIVE_TEXT]Counter-Preparation Fire[ENDCOLOR] against your {@2_EnUName} attack!</Text>
 		</Row>
 		<Row Tag="TXT_KEY_MISC_YOU_GET_DEFENSIVE_SUPPORT">
 			<Text>Your {@1_UnitName} was able to provide [COLOR_POSITIVE_TEXT]Counter-Preparation Fire[ENDCOLOR] against an enemy {@2_EnUName} attack!</Text>
+		</Row>
+
+		<Row Tag="TXT_KEY_MISC_YOU_EVADED_COUNTER_FIRE">
+			<Text>An enemy {@2_EnUName} [COLOR_POSITIVE_TEXT]failed to use Counter-Fire[ENDCOLOR] againstYour {@1_UnitName}!</Text>
+		</Row>
+		<Row Tag="TXT_KEY_MISC_YOU_FAILED_USE_COUNTER_FIRE">
+			<Text>Your {@1_UnitName} [COLOR_NEGATIVE_TEXT]failed to use Counter-Fire[ENDCOLOR] against an enemy {@2_EnUName}!</Text>
+		</Row>
+
+		<Row Tag="TXT_KEY_MISC_YOU_FAILED_GET_OFFENSIVE_SUPPORT">
+			<Text>Your {@1_UnitName} [COLOR_NEGATIVE_TEXT]failed to provide Preparation Fire[ENDCOLOR] for your {@2_EnUName} attack!</Text>
+		</Row>
+		<Row Tag="TXT_KEY_MISC_ENEMY_FAILED_GET_OFFENSIVE_SUPPORT">
+			<Text>The enemy {@1_UnitName} [COLOR_POSITIVE_TEXT]failed to provide Preparation Fire[ENDCOLOR] for his {@2_EnUName} attack!</Text>
+		</Row>
+
+		<Row Tag="TXT_KEY_MISC_ENEMY_FAILED_GET_DEFENSIVE_SUPPORT">
+			<Text>The enemy {@1_UnitName} [COLOR_POSITIVE_TEXT]failed to provide Counter-Preparation Fire[ENDCOLOR] against your {@2_EnUName} attack!</Text>
+		</Row>
+		<Row Tag="TXT_KEY_MISC_YOU_FAILED_GET_DEFENSIVE_SUPPORT">
+			<Text>Your {@1_UnitName} [COLOR_NEGATIVE_TEXT]failed to provide Counter-Preparation Fire[ENDCOLOR] against an enemy {@2_EnUName} attack!</Text>
 		</Row>
 		
 		<Replace Tag="TXT_KEY_MISC_YOU_ATTACK_BY_AIR">
@@ -340,6 +361,9 @@
 		</Row>
 		
 		<!-- CsebMod - Extended Plot MouseOver Popup -->
+		<Replace Tag="TXT_KEY_PLOTROLL_UNIT_DESCRIPTION_CIV">
+			<Text>{1} {2}</Text>
+		</Replace>
 		<Row Tag="TXT_KEY_CSB_PLOTROLL_IMPROVEMENTS_REQUIRED_FOR_RESOURCE">
 			<Text>(with {1})</Text>
 		</Row>
@@ -372,8 +396,17 @@
 		<Row Tag="TXT_KEY_HOVERINFO_EXPERIENCE">
 			<Text>{1_num}/{2_num}XP</Text>
 		</Row>
-		<Row Tag="TXT_KEY_HOVERINFO_HEALTH">
+		<Row Tag="TXT_KEY_HOVERINFO_BAD_HEALTH">
 			<Text>[COLOR_NEGATIVE_TEXT]{1_num}HP[ENDCOLOR]</Text>
+		</Row>
+		<Row Tag="TXT_KEY_HOVERINFO_DAMAGED_HEALTH">
+			<Text>[COLOR_YELLOW]{1_num}HP[ENDCOLOR]</Text>
+		</Row>
+		<Row Tag="TXT_KEY_HOVERINFO_HEALTH">
+			<Text>{1_num}HP</Text>
+		</Row>
+		<Row Tag="TXT_KEY_HOVERINFO_FULL_HEALTH">
+			<Text>[COLOR_POSITIVE_TEXT]{1_num}HP[ENDCOLOR]</Text>
 		</Row>
 		<!-- R.E.D. extension -->
 		<Row Tag="TXT_KEY_HOVERINFO_FORTIFIED">
@@ -390,6 +423,18 @@
 		</Row>
 		<Row Tag="TXT_KEY_HOVERINFO_OIL_CONSUMPTION">
 			<Text>Fuel Consumption per turn:[NEWLINE]{1_num} [ICON_RES_OIL] Oil</Text>
+		</Row>
+		<Row Tag="TXT_KEY_HOVERINFO_FILLING_PERCENTAGE">
+			<Text>Stacking capacity: {1_num} % filled</Text>
+		</Row>
+		<Row Tag="TXT_KEY_HOVERINFO_STACKING_LEVEL">
+			<Text>Stacking level: {1_num} filled / {2_num} available</Text>
+		</Row>
+		<Row Tag="TXT_KEY_HOVERINFO_STACKING_VALUE">
+			<Text>Stacking weight: {1_num} %</Text>
+		</Row>
+		<Row Tag="TXT_KEY_HOVERINFO_FIRE_POINTS">
+			<Text>Fire points left: {1_num}</Text>
 		</Row>
 
 

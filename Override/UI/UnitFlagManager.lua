@@ -570,6 +570,16 @@ g_UnitFlagClass =  --@was: local -- Modified by Erendir
 			string = string .. ", " .. pUnit:GetBaseRangedCombatStrength() .."[ICON_RANGE_STRENGTH]";
 		end
 
+		-- fire points left
+		
+		if (pUnit:IsRanged()) then
+			string = string .. "[NEWLINE]" ..  Locale.ConvertTextKey("TXT_KEY_HOVERINFO_FIRE_POINTS", pUnit:GetFirePoints());
+		end
+
+		-- stacking weight
+		local stackingPercent = (pUnit:GetStackValue() / GameDefines.PLOT_UNIT_LIMIT * 100)
+		string = string .. "[NEWLINE]" ..  Locale.ConvertTextKey("TXT_KEY_HOVERINFO_STACKING_VALUE", stackingPercent);
+
 		-- Convoy ? Transport ? Destination ?
 		local bIsConvoy = false
 		
@@ -629,9 +639,15 @@ g_UnitFlagClass =  --@was: local -- Modified by Erendir
 			strStatus = strStatus .. Locale.ConvertTextKey("TXT_KEY_HOVERINFO_RANGE_STRIKE", pUnit:Range()) .. "  ";
 		end
 		
-		--if pUnit:GetDamage() ~= 0 then
+		if pUnit:GetDamage() > (pUnit:GetMaxHitPoints()*2/3) then
+			strStatus = strStatus .. Locale.ConvertTextKey("TXT_KEY_HOVERINFO_BAD_HEALTH", pUnit:GetMaxHitPoints() - pUnit:GetDamage()) .. "  ";
+		elseif pUnit:GetDamage() > (pUnit:GetMaxHitPoints()/3) then
+			strStatus = strStatus .. Locale.ConvertTextKey("TXT_KEY_HOVERINFO_DAMAGED_HEALTH", pUnit:GetMaxHitPoints() - pUnit:GetDamage()) .. "  ";
+		elseif pUnit:GetDamage() > 0 then
 			strStatus = strStatus .. Locale.ConvertTextKey("TXT_KEY_HOVERINFO_HEALTH", pUnit:GetMaxHitPoints() - pUnit:GetDamage()) .. "  ";
-		--end
+		else
+			strStatus = strStatus .. Locale.ConvertTextKey("TXT_KEY_HOVERINFO_FULL_HEALTH", pUnit:GetMaxHitPoints() - pUnit:GetDamage()) .. "  ";
+		end
 
 		if strStatus ~= "" then
 			string = string .. "[NEWLINE]" .. strStatus

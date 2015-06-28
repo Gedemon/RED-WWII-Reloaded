@@ -129,6 +129,19 @@ INSERT INTO Defines (Name, Value) VALUES ('CITY_AIR_UNIT_LIMIT', 150);
 INSERT INTO Defines (Name, Value) VALUES ('MAX_HP_PERCENT_RECEIVED_DAMAGE', 20);	-- Can't receive more than 20% of (our) Max Hit Points in a combat.
 INSERT INTO Defines (Name, Value) VALUES ('MAX_HP_PERCENT_INFLICTED_DAMAGE', 100);	-- Can't inflict more than 100% of (our) Max Hit Points in a combat.
 
+/* Fire Points Action Cost */
+INSERT INTO Defines (Name, Value) VALUES ('FIRE_POINTS_OFFENSIVE_STRIKE_COST', 3);
+INSERT INTO Defines (Name, Value) VALUES ('FIRE_POINTS_DEFENSIVE_STRIKE_COST', 2);
+INSERT INTO Defines (Name, Value) VALUES ('FIRE_POINTS_COUNTER_FIRE_COST', 1);
+INSERT INTO Defines (Name, Value) VALUES ('FIRE_POINTS_OPPORTUNITY_FIRE_COST', 1);
+
+/* Fire Support */
+INSERT INTO Defines (Name, Value) VALUES ('SUPPORT_FIRE_MAX_REQUEST_RANGE', 0);			-- Distance maximum between an unit requesting support fire and the unit providing support fire. 0 means same plot only.
+INSERT INTO Defines (Name, Value) VALUES ('SUPPORT_FIRE_MIN_HEALTH_PERCENT_LEFT', 33);	-- Don't provide Support Fire (including counter-fire) at low health (could be exposed to another unit's counter-fire)
+INSERT INTO Defines (Name, Value) VALUES ('SUPPORT_FIRE_CHANCE_BY_HEALTH', 0);			-- (bool) Chance to provide Support Fire is related to health
+INSERT INTO Defines (Name, Value) VALUES ('SUPPORT_FIRE_BASE_CHANCE_PERCENT', 100);		-- Base chance to provide Support Fire
+INSERT INTO Defines (Name, Value) VALUES ('SUPPORT_FIRE_NO_COUNTER', 1);				-- No Counter-Fire on Support Fire
+
 --------------------------------------------------------------------------------------------
 -- Edit tables for values checked in DLL code...
 --------------------------------------------------------------------------------------------
@@ -142,12 +155,15 @@ ALTER TABLE Units ADD COLUMN StackValue integer DEFAULT '60';
 /* Unit Capture Territory */
 ALTER TABLE Units ADD COLUMN CanCaptureTerritory integer DEFAULT '1';
 
-/* First strike capabilities (the unit must also have ranged attack capability) */
+/* First strike / counter-fire capabilities (the unit must also have ranged attack capability) */
 ALTER TABLE Units ADD COLUMN OffensiveSupportFire integer DEFAULT '0';
 ALTER TABLE Units ADD COLUMN DefensiveSupportFire integer DEFAULT '0';
 ALTER TABLE Units ADD COLUMN CounterFire integer DEFAULT '0';
 ALTER TABLE Units ADD COLUMN CounterFireSameCombatType integer DEFAULT '0';
 ALTER TABLE Units ADD COLUMN OnlySupportFire integer DEFAULT '0';
+ALTER TABLE Units ADD COLUMN FirePoints integer DEFAULT '0';
+ALTER TABLE Units ADD COLUMN ImmuneToCounterFire integer DEFAULT '0';
+
 
 --------------------------------------------------------------------------------------------
 -- Combat & Stacking rules...
@@ -159,6 +175,7 @@ UPDATE Units SET MaxHP = 75 WHERE Domain = 'DOMAIN_AIR';
 UPDATE Units SET MaxHP = 200 WHERE Domain = 'DOMAIN_LAND';
 UPDATE Units SET MaxHP = 400 WHERE Domain = 'DOMAIN_LAND' AND (Class LIKE '%INFANTRY%') AND NOT (Class LIKE '%TANK%');
 UPDATE Units SET MaxHP = 75 WHERE Domain = 'DOMAIN_LAND' AND (Class LIKE '%TANK_DESTROYER%' OR Class LIKE '%ASSAULT_GUN%' OR Class LIKE '%ARTILLERY%' OR Class LIKE '%AA_GUN%' OR Class LIKE '%ANTI_AIRCRAFT_GUN%' OR Class LIKE '%FIELD_GUN%');
+UPDATE Units SET MaxHP = 50 WHERE Domain = 'DOMAIN_LAND' AND (Class LIKE '%FORTIFIED_GUN%');
 UPDATE Units SET MaxHP = 45 WHERE Domain = 'DOMAIN_LAND' AND (Class LIKE '%HEAVY%');
 UPDATE Units SET MaxHP = 10 WHERE Domain = 'DOMAIN_LAND' AND (Class LIKE '%SPECIAL_FORCES%');
 
@@ -182,6 +199,7 @@ UPDATE Units SET StackValue = 60 WHERE Domain = 'DOMAIN_LAND';
 UPDATE Units SET StackValue = 30 WHERE Domain = 'DOMAIN_LAND' AND (Class LIKE '%TANK_DESTROYER%' OR Class LIKE '%ASSAULT_GUN%' OR Class LIKE '%ARTILLERY%' OR Class LIKE '%AA_GUN%' OR Class LIKE '%ANTI_AIRCRAFT_GUN%' OR Class LIKE '%FIELD_GUN%');
 UPDATE Units SET StackValue = 39 WHERE Domain = 'DOMAIN_LAND' AND (Class LIKE '%HEAVY%');
 UPDATE Units SET StackValue = 20 WHERE Domain = 'DOMAIN_LAND' AND (Class LIKE '%SPECIAL_FORCES%');
+UPDATE Units SET StackValue = 10 WHERE Domain = 'DOMAIN_LAND' AND (Class LIKE '%FORTIFIED_GUN%');
 
 UPDATE Units SET StackValue = 60 WHERE Domain = 'DOMAIN_SEA';
 UPDATE Units SET StackValue = 39 WHERE Domain = 'DOMAIN_SEA' AND (Class LIKE '%CRUISER%');
@@ -198,7 +216,13 @@ UPDATE Units SET OffensiveSupportFire = 1 WHERE CombatClass = 'UNITCOMBAT_SIEGE'
 UPDATE Units SET DefensiveSupportFire = 1 WHERE CombatClass = 'UNITCOMBAT_SIEGE';
 
 /* Counter Fire */
-UPDATE Units SET CounterFire = 1 WHERE CombatClass = 'UNITCOMBAT_SIEGE' OR CombatClass = 'UNITCOMBAT_NAVAL' OR CombatClass = 'UNITCOMBAT_ARCHER';
+UPDATE Units SET CounterFire = 1 WHERE (CombatClass = 'UNITCOMBAT_SIEGE' OR CombatClass = 'UNITCOMBAT_NAVAL' OR CombatClass = 'UNITCOMBAT_ARCHER') AND NOT (Class LIKE '%SUBMARINE%');
+
+/* Fire points */
+UPDATE Units SET FirePoints = 5 WHERE (CombatClass = 'UNITCOMBAT_SIEGE' OR CombatClass = 'UNITCOMBAT_NAVAL' OR CombatClass = 'UNITCOMBAT_ARCHER') AND NOT (Class LIKE '%SUBMARINE%');
+
+/* Immunity to counter fire */
+UPDATE Units SET ImmuneToCounterFire = 1 WHERE Domain = 'DOMAIN_SEA' AND (Class LIKE '%SUBMARINE%');
 
 /* Counter Fire only against same combat class */
 --UPDATE Units SET CounterFireSameCombatType = 1 WHERE CombatClass = 'UNITCOMBAT_ARCHER' AND Class <> 'UNITCLASS_ROMAN_BALLISTA';
@@ -208,13 +232,23 @@ UPDATE Units SET CounterFire = 1 WHERE CombatClass = 'UNITCOMBAT_SIEGE' OR Comba
 -- Combat damage --
 --------------------------------------------------------------------------------------------
 UPDATE Defines SET Value = 10		WHERE Name = 'COMBAT_DAMAGE';											-- default = 20
-UPDATE Defines SET Value = 1800		WHERE Name = 'ATTACK_SAME_STRENGTH_MIN_DAMAGE';							-- default = 2400
-UPDATE Defines SET Value = 1200		WHERE Name = 'ATTACK_SAME_STRENGTH_POSSIBLE_EXTRA_DAMAGE';				-- default = 1200
-UPDATE Defines SET Value = 1200		WHERE Name = 'RANGE_ATTACK_SAME_STRENGTH_MIN_DAMAGE';					-- default = 2400
-UPDATE Defines SET Value = 800		WHERE Name = 'RANGE_ATTACK_SAME_STRENGTH_POSSIBLE_EXTRA_DAMAGE';		-- default = 1200
-UPDATE Defines SET Value = 1600		WHERE Name = 'AIR_STRIKE_SAME_STRENGTH_MIN_DEFENSE_DAMAGE';				-- default = 2400
-UPDATE Defines SET Value = 900		WHERE Name = 'AIR_STRIKE_SAME_STRENGTH_POSSIBLE_EXTRA_DEFENSE_DAMAGE';	-- default = 1200
-UPDATE Defines SET Value = 1800		WHERE Name = 'INTERCEPTION_SAME_STRENGTH_MIN_DAMAGE';					-- default = 2400
-UPDATE Defines SET Value = 1200		WHERE Name = 'INTERCEPTION_SAME_STRENGTH_POSSIBLE_EXTRA_DAMAGE';		-- default = 1200
-UPDATE Defines SET Value = 100		WHERE Name = 'CITY_ATTACKING_DAMAGE_MOD';								-- default = 100
+UPDATE Defines SET Value = 1250		WHERE Name = 'ATTACK_SAME_STRENGTH_MIN_DAMAGE';							-- default = 2400
+UPDATE Defines SET Value = 950		WHERE Name = 'ATTACK_SAME_STRENGTH_POSSIBLE_EXTRA_DAMAGE';				-- default = 1200
+UPDATE Defines SET Value = 700		WHERE Name = 'RANGE_ATTACK_SAME_STRENGTH_MIN_DAMAGE';					-- default = 2400
+UPDATE Defines SET Value = 500		WHERE Name = 'RANGE_ATTACK_SAME_STRENGTH_POSSIBLE_EXTRA_DAMAGE';		-- default = 1200
+UPDATE Defines SET Value = 800		WHERE Name = 'AIR_STRIKE_SAME_STRENGTH_MIN_DEFENSE_DAMAGE';				-- default = 2400
+UPDATE Defines SET Value = 600		WHERE Name = 'AIR_STRIKE_SAME_STRENGTH_POSSIBLE_EXTRA_DEFENSE_DAMAGE';	-- default = 1200
+UPDATE Defines SET Value = 1000		WHERE Name = 'INTERCEPTION_SAME_STRENGTH_MIN_DAMAGE';					-- default = 2400
+UPDATE Defines SET Value = 800		WHERE Name = 'INTERCEPTION_SAME_STRENGTH_POSSIBLE_EXTRA_DAMAGE';		-- default = 1200
+UPDATE Defines SET Value = 200		WHERE Name = 'CITY_ATTACKING_DAMAGE_MOD';								-- default = 100
 UPDATE Defines SET Value = 200		WHERE Name = 'ATTACKING_CITY_MELEE_DAMAGE_MOD';							-- default = 100
+
+/* test */
+UPDATE Units SET Range = 10 WHERE Range > 0 AND (CombatClass = 'UNITCOMBAT_SIEGE' OR CombatClass = 'UNITCOMBAT_NAVAL' OR CombatClass = 'UNITCOMBAT_ARCHER');
+UPDATE Defines SET Value = 3		WHERE Name = 'SUPPORT_FIRE_MAX_REQUEST_RANGE';
+UPDATE Defines SET Value = 0		WHERE Name = 'SUPPORT_FIRE_MIN_HEALTH_PERCENT_LEFT';
+UPDATE Defines SET Value = 1		WHERE Name = 'SUPPORT_FIRE_CHANCE_BY_HEALTH';
+UPDATE Defines SET Value = 66		WHERE Name = 'SUPPORT_FIRE_BASE_CHANCE_PERCENT';
+UPDATE Defines SET Value = 1		WHERE Name = 'SUPPORT_FIRE_NO_COUNTER';
+UPDATE Units SET BaseSightRange = BaseSightRange + 2 WHERE BaseSightRange > 0 AND NOT (CombatClass = 'UNITCOMBAT_SIEGE');
+
