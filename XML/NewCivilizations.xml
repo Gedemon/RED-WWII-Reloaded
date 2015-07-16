@@ -261,7 +261,7 @@
 			<Set>
 				<Description>TXT_KEY_LEADER_HITLER</Description>
 				<CivilopediaTag>TXT_KEY_CIVILOPEDIA_LEADERS_HITLER</CivilopediaTag>
-				<ArtDefineTag>Hitler_Scene.xml</ArtDefineTag>
+				<ArtDefineTag>DiploGermany.xml</ArtDefineTag>
 				<PortraitIndex>0</PortraitIndex>
 				<IconAtlas>WW2_LEADERS</IconAtlas>
 			</Set>
@@ -1224,49 +1224,55 @@
 		<Update>
 			<Where LeaderType="LEADER_ELIZABETH"/>
 			<Set>
-				<TraitType>TRAIT_NEVER_SURRENDER</TraitType>
+				<TraitType>TRAIT_EMPTY</TraitType>
 			</Set>
 		</Update>
 		<Update>
 			<Where LeaderType="LEADER_BISMARCK"/>
 			<Set>
-				<TraitType>TRAIT_BLITZKRIEG</TraitType>
+				<TraitType>TRAIT_EMPTY</TraitType>
 			</Set>
 		</Update>
 		<Update>
 			<Where LeaderType="LEADER_NAPOLEON"/>
 			<Set>
-				<TraitType>TRAIT_RESISTANCE</TraitType>
+				<TraitType>TRAIT_EMPTY</TraitType>
 			</Set>
 		</Update>
 		<Update>
 			<Where LeaderType="LEADER_CATHERINE"/>
 			<Set>
-				<TraitType>TRAIT_GREAT_PATRIOTIC_WAR</TraitType>
+				<TraitType>TRAIT_EMPTY</TraitType>
 			</Set>
 		</Update>
 		<Update>
 			<Where LeaderType="LEADER_WASHINGTON"/>
 			<Set>
-				<TraitType>TRAIT_ARSENALOFDEMOCRACY</TraitType>
+				<TraitType>TRAIT_EMPTY</TraitType>
 			</Set>
 		</Update>
 		<Update>
 			<Where LeaderType="LEADER_WU_ZETIAN"/>
 			<Set>
-				<TraitType>TRAIT_SUNYATSENSTHEORY</TraitType>
+				<TraitType>TRAIT_EMPTY</TraitType>
 			</Set>
 		</Update>
 		<Update>
 			<Where LeaderType="LEADER_AUGUSTUS"/>
 			<Set>
-				<TraitType>TRAIT_MARENOSTRUM</TraitType>
+				<TraitType>TRAIT_EMPTY</TraitType>
 			</Set>
 		</Update>
 		<Update>
 			<Where LeaderType="LEADER_ALEXANDER"/>
 			<Set>
-				<TraitType>TRAIT_HEROES</TraitType>
+				<TraitType>TRAIT_EMPTY</TraitType>
+			</Set>
+		</Update>
+		<Update>
+			<Where LeaderType="LEADER_ODA_NOBUNAGA"/>
+			<Set>
+				<TraitType>TRAIT_EMPTY</TraitType>
 			</Set>
 		</Update>
 	</Leader_Traits>
@@ -1275,6 +1281,11 @@
 			<Type>TRAIT_RED_WW2</Type>
 			<Description>TXT_KEY_RED_MOD_DESC</Description>
 			<ShortDescription>TXT_KEY_RED_MOD_TITLE</ShortDescription>
+		</Row>
+		<Row>
+			<Type>TRAIT_EMPTY</Type>
+			<Description>...</Description>
+			<ShortDescription>...</ShortDescription>
 		</Row>
 		<Row>
 			<Type>TRAIT_NEVER_SURRENDER</Type>
@@ -1341,227 +1352,5 @@
 			<PromotionType>PROMOTION_SUPPLY</PromotionType>
 		</Row>
 	</Trait_FreePromotionUnitCombats>
-
-	<Civilization_CityNames>
-		<!-- ITALY -->		
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_NAME_RODHES</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_MILAN</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_NAPLES</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_TURIN</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_PALERMO</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_VENICE</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_GENOA</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_FLORENCE</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_BOLOGNA</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_BARI</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_CATANIA</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_VERONA</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_PARMA</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_LIVORNO</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_CAGLIARI</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_FOGGIA</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_SALERNO</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_FORLI</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_PISA</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_ASTI</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_MESSINA</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_TRIESTE</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_PRATO</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_VICENZA</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_BRESCIA</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_MODENA</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_PADUA</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_SIRACUSA</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_FERRARA</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_NOVARA</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_TARANTO</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_PERUGIA</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_LATINA</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_BERGAMO</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_PESCARA</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_MONZA</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_SASSARI</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_RIMINI</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_TERNI</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ROME</CivilizationType>
-			<CityName>TXT_KEY_CITY_ROME_VITTORIA</CityName>
-		</Row>
-
-		<!-- GERMANY -->
-		<Row>
-			<CivilizationType>CIVILIZATION_GERMANY</CivilizationType>
-			<CityName>TXT_KEY_CITY_NAME_NUREMBERG</CityName>
-		</Row>
-		
-		<!-- U.K. -->
-		<Row>
-			<CivilizationType>CIVILIZATION_ENGLAND</CivilizationType>
-			<CityName>TXT_KEY_CITY_NAME_GIBRALTAR</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ENGLAND</CivilizationType>
-			<CityName>TXT_KEY_CITY_NAME_SUEZ</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ENGLAND</CivilizationType>
-			<CityName>TXT_KEY_CITY_NAME_MALTE</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ENGLAND</CivilizationType>
-			<CityName>TXT_KEY_CITY_NAME_NICOSIA</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ENGLAND</CivilizationType>
-			<CityName>TXT_KEY_CITY_NAME_KIRKWALL</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_ENGLAND</CivilizationType>
-			<CityName>TXT_KEY_CITY_NAME_EDINBURGH</CityName>
-		</Row>
-
-		<!-- U.S.S.R. -->
-		<Row>
-			<CivilizationType>CIVILIZATION_RUSSIA</CivilizationType>
-			<CityName>TXT_KEY_CITY_NAME_STALINGRAD</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_RUSSIA</CivilizationType>
-			<CityName>TXT_KEY_CITY_NAME_LENINGRAD</CityName>
-		</Row>
-		<Row>
-			<CivilizationType>CIVILIZATION_RUSSIA</CivilizationType>
-			<CityName>TXT_KEY_CITY_NAME_SEVASTOPOL</CityName>
-		</Row>
-
-		<!-- U.S.A -->
-		<Row>
-			<CivilizationType>CIVILIZATION_AMERICA</CivilizationType>
-			<CityName>TXT_KEY_CITY_NAME_PANAMA</CityName>
-		</Row>
-	</Civilization_CityNames>
 	
-	
-	<Units>
-		<Update>
-			<Set GoldenAgeTurns="0"/>
-		</Update>
-	</Units>
 </GameData>

@@ -4,6 +4,29 @@
 --------------------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------------------
+-- Edit tables for values checked in DLL code...
+--------------------------------------------------------------------------------------------
+
+/* Unit Max Hit Points */
+ALTER TABLE Units ADD COLUMN MaxHP integer DEFAULT '150';
+
+/* Unit Stack value, each unit has a weight, total weight on a plot can't exceed PLOT_UNIT_LIMIT */
+ALTER TABLE Units ADD COLUMN StackValue integer DEFAULT '60';
+
+/* Unit Capture Territory */
+ALTER TABLE Units ADD COLUMN CanCaptureTerritory integer DEFAULT '1';
+
+/* First strike / counter-fire capabilities (the unit must also have ranged attack capability) */
+ALTER TABLE Units ADD COLUMN OffensiveSupportFire integer DEFAULT '0';
+ALTER TABLE Units ADD COLUMN DefensiveSupportFire integer DEFAULT '0';
+ALTER TABLE Units ADD COLUMN CounterFire integer DEFAULT '0';
+ALTER TABLE Units ADD COLUMN CounterFireSameCombatType integer DEFAULT '0';
+ALTER TABLE Units ADD COLUMN OnlySupportFire integer DEFAULT '0';
+ALTER TABLE Units ADD COLUMN FirePoints integer DEFAULT '0';
+ALTER TABLE Units ADD COLUMN ImmuneToCounterFire integer DEFAULT '0';
+
+
+--------------------------------------------------------------------------------------------
 -- Improvements
 --------------------------------------------------------------------------------------------
 
@@ -61,12 +84,34 @@ UPDATE ArtDefine_Landmarks SET Scale = 0.65*Scale WHERE ImprovementType = 'ART_D
 -- Buildings
 --------------------------------------------------------------------------------------------
 
+-- That's the list of buildings you can construct.
+UPDATE Buildings SET Cost = -1
+	WHERE Type <> 'BUILDING_WALLS'
+	AND Type <> 'BUILDING_FACTORY'
+	AND Type <> 'BUILDING_ARSENAL'
+	AND Type <> 'BUILDING_HARBOR'
+	AND Type <> 'BUILDING_BROADCAST_TOWER'
+	AND Type <> 'BUILDING_BARRACKS'
+	AND Type <> 'BUILDING_MILITARY_ACADEMY'
+	AND Type <> 'BUILDING_MILITARY_BASE'
+	AND Type <> 'BUILDING_HOSPITAL'
+	AND Type <> 'BUILDING_BANK'
+	AND Type <> 'BUILDING_COURTHOUSE'
+	AND Type <> 'BUILDING_LAND_FACTORY'
+	AND Type <> 'BUILDING_SMALL_AIR_FACTORY'
+	AND Type <> 'BUILDING_MEDIUM_AIR_FACTORY'
+	AND Type <> 'BUILDING_LARGE_AIR_FACTORY'
+	AND Type <> 'BUILDING_SHIPYARD'
+	AND Type <> 'BUILDING_SYNTHETIC_FUEL_PLANT'
+	AND Type <> 'BUILDING_OIL_REFINERY';
+
+
 UPDATE Building_Flavors SET Flavor = Flavor * 0.75;	-- Build less buildings...
 
 --------------------------------------------------------------------------------------------
 -- Units
 --------------------------------------------------------------------------------------------
-UPDATE Units SET ProjectPrereq = NULL;			-- We don't need to set projects for units, this is handled by the mod custom function/tables
+--UPDATE Units SET ProjectPrereq = NULL;			-- We don't need to set projects for units, this is handled by the mod custom function/tables
 UPDATE Unit_Flavors SET Flavor = Flavor * 2;	-- Build more units...
 
 --------------------------------------------------------------------------------------------
@@ -74,11 +119,21 @@ UPDATE Unit_Flavors SET Flavor = Flavor * 2;	-- Build more units...
 --------------------------------------------------------------------------------------------
 UPDATE Project_Flavors SET Flavor = Flavor * 1.75 WHERE ProjectType LIKE 'PROJECT_%';	-- Project's flavor relative to units...
 
+-- We don't need/want to research thoses...
+DELETE FROM Projects
+	WHERE TYPE = 'PROJECT_SUBMARINE'
+	OR TYPE = 'PROJECT_DESTROYER'
+	OR TYPE = 'PROJECT_ATOMIC_BOMB'
+	OR TYPE = 'PROJECT_ANTI_AIRCRAFT_GUN'
+	OR TYPE = 'PROJECT_FIELD_GUN'
+	OR TYPE = 'PROJECT_ARTILLERY'
+	OR TYPE = 'PROJECT_INFANTRY'
+	OR TYPE = 'PROJECT_PARATROOPER';
 
-/*
-	Remap Units and UnitClasses ID (the game will expect them to start at ID = 0, and at this point of the code, the first entry is ID = 1)
-	Code Thanks to lemmy101, Thalassicus, Pazyryk	 
-*/
+--------------------------------------------------------------------------------------------
+--	Remap Units and UnitClasses ID (the game will expect them to start at ID = 0, and at this point of the code, the first entry is ID = 1)
+--	Code Thanks to lemmy101, Thalassicus, Pazyryk	 
+--------------------------------------------------------------------------------------------
 -- Units
 CREATE TABLE IDRemapper ( id INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT );
 INSERT INTO IDRemapper (Type) SELECT Type FROM Units ORDER by ID;
@@ -91,9 +146,16 @@ INSERT INTO IDRemapper (Type) SELECT Type FROM UnitClasses ORDER by ID;
 UPDATE UnitClasses SET ID =	( SELECT IDRemapper.id-1 FROM IDRemapper WHERE UnitClasses.Type = IDRemapper.Type);
 DROP TABLE IDRemapper;
 
+-- Projects
+CREATE TABLE IDRemapper ( id INTEGER PRIMARY KEY AUTOINCREMENT, Type TEXT );
+INSERT INTO IDRemapper (Type) SELECT Type FROM Projects ORDER by ID;
+UPDATE Projects SET ID =	( SELECT IDRemapper.id-1 FROM IDRemapper WHERE Projects.Type = IDRemapper.Type);
+DROP TABLE IDRemapper;
+
 -- Reset ID autoincrement seq to correct value for modmod loaded after this one...
 UPDATE sqlite_sequence SET seq = (SELECT COUNT(ID) FROM Units)-1 WHERE name = 'Units';
 UPDATE sqlite_sequence SET seq = (SELECT COUNT(ID) FROM UnitClasses)-1 WHERE name = 'UnitClasses';
+UPDATE sqlite_sequence SET seq = (SELECT COUNT(ID) FROM Projects)-1 WHERE name = 'Projects';
 
 
 --------------------------------------------------------------------------------------------
@@ -142,27 +204,9 @@ INSERT INTO Defines (Name, Value) VALUES ('SUPPORT_FIRE_CHANCE_BY_HEALTH', 0);		
 INSERT INTO Defines (Name, Value) VALUES ('SUPPORT_FIRE_BASE_CHANCE_PERCENT', 100);		-- Base chance to provide Support Fire
 INSERT INTO Defines (Name, Value) VALUES ('SUPPORT_FIRE_NO_COUNTER', 1);				-- No Counter-Fire on Support Fire
 
---------------------------------------------------------------------------------------------
--- Edit tables for values checked in DLL code...
---------------------------------------------------------------------------------------------
-
-/* Unit Max Hit Points */
-ALTER TABLE Units ADD COLUMN MaxHP integer DEFAULT '150';
-
-/* Unit Stack value, each unit has a weight, total weight on a plot can't exceed PLOT_UNIT_LIMIT */
-ALTER TABLE Units ADD COLUMN StackValue integer DEFAULT '60';
-
-/* Unit Capture Territory */
-ALTER TABLE Units ADD COLUMN CanCaptureTerritory integer DEFAULT '1';
-
-/* First strike / counter-fire capabilities (the unit must also have ranged attack capability) */
-ALTER TABLE Units ADD COLUMN OffensiveSupportFire integer DEFAULT '0';
-ALTER TABLE Units ADD COLUMN DefensiveSupportFire integer DEFAULT '0';
-ALTER TABLE Units ADD COLUMN CounterFire integer DEFAULT '0';
-ALTER TABLE Units ADD COLUMN CounterFireSameCombatType integer DEFAULT '0';
-ALTER TABLE Units ADD COLUMN OnlySupportFire integer DEFAULT '0';
-ALTER TABLE Units ADD COLUMN FirePoints integer DEFAULT '0';
-ALTER TABLE Units ADD COLUMN ImmuneToCounterFire integer DEFAULT '0';
+/* Supply Lines */
+INSERT INTO Defines (Name, Value) VALUES ('SUPPLY_TRUCKS_MOVEMENT', 8);					-- Distance before supply Line start losing efficiency, based on the movement cost of the full supply line (1 point = 1 move on flat terrain with no road/railroad/features)
+INSERT INTO Defines (Name, Value) VALUES ('SUPPLY_TRUCKS_MINIMAL_EFFICIENCY', 10);		-- minimal % of supply transported when the movement cost of a supply line is superior to the supply trucks movement points.
 
 
 --------------------------------------------------------------------------------------------
@@ -243,12 +287,17 @@ UPDATE Defines SET Value = 800		WHERE Name = 'INTERCEPTION_SAME_STRENGTH_POSSIBL
 UPDATE Defines SET Value = 200		WHERE Name = 'CITY_ATTACKING_DAMAGE_MOD';								-- default = 100
 UPDATE Defines SET Value = 200		WHERE Name = 'ATTACKING_CITY_MELEE_DAMAGE_MOD';							-- default = 100
 
-/* test */
+/* test for tactical play */
+/*
 UPDATE Units SET Range = 10 WHERE Range > 0 AND (CombatClass = 'UNITCOMBAT_SIEGE' OR CombatClass = 'UNITCOMBAT_NAVAL' OR CombatClass = 'UNITCOMBAT_ARCHER');
 UPDATE Defines SET Value = 3		WHERE Name = 'SUPPORT_FIRE_MAX_REQUEST_RANGE';
-UPDATE Defines SET Value = 0		WHERE Name = 'SUPPORT_FIRE_MIN_HEALTH_PERCENT_LEFT';
+UPDATE Defines SET Value = 33		WHERE Name = 'SUPPORT_FIRE_MIN_HEALTH_PERCENT_LEFT';
 UPDATE Defines SET Value = 1		WHERE Name = 'SUPPORT_FIRE_CHANCE_BY_HEALTH';
 UPDATE Defines SET Value = 66		WHERE Name = 'SUPPORT_FIRE_BASE_CHANCE_PERCENT';
-UPDATE Defines SET Value = 1		WHERE Name = 'SUPPORT_FIRE_NO_COUNTER';
+UPDATE Defines SET Value = 0		WHERE Name = 'SUPPORT_FIRE_NO_COUNTER';
 UPDATE Units SET BaseSightRange = BaseSightRange + 2 WHERE BaseSightRange > 0 AND NOT (CombatClass = 'UNITCOMBAT_SIEGE');
+--*/
 
+/* Post Defines */
+
+INSERT INTO "PostDefines" VALUES('PROMOTION_NO_SUPPLY','PROMOTION_NO_SUPPLY','UnitPromotions');

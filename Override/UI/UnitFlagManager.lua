@@ -534,6 +534,7 @@ g_UnitFlagClass =  --@was: local -- Modified by Erendir
 		local pPlayer = Players[Game.GetActivePlayer()];
         local active_team = pPlayer:GetTeam();
         local team = self.m_Player:GetTeam();
+		local stringSeparator = "[NEWLINE]------------------------------------[NEWLINE]";
 		--local unitData = MapModData.RED.UnitData
 		--if not unitData then
 		--	print("WARNING : unitData is nil for " .. tostring(pUnit:GetName()))
@@ -652,7 +653,13 @@ g_UnitFlagClass =  --@was: local -- Modified by Erendir
 		if strStatus ~= "" then
 			string = string .. "[NEWLINE]" .. strStatus
 		end
-		
+
+		-- Supply Line
+		local supplyEfficiency = pUnit:GetSupplyLineEfficiency()	
+		if supplyEfficiency > 0 then
+			string = string .. stringSeparator;
+			string = string .. Locale.ConvertTextKey("TXT_KEY_HOVERINFO_SUPPLY_EFFICIENCY", supplyEfficiency );
+		end
 				
 		-- Reinforcement
 		--if not bIsConvoy then
@@ -667,11 +674,11 @@ g_UnitFlagClass =  --@was: local -- Modified by Erendir
 		--	end
 		--end
 
-		-- Oil Consumption
+		-- Fuel Consumption
 		local reqOil = GameInfo.Units[pUnit:GetUnitType()].FuelConsumption		
 		if reqOil > 0 then
-			string = string .. "[NEWLINE]------------";
-			string = string .. "[NEWLINE]" .. Locale.ConvertTextKey("TXT_KEY_HOVERINFO_OIL_CONSUMPTION", reqOil );
+			string = string .. stringSeparator;
+			string = string .. Locale.ConvertTextKey("TXT_KEY_HOVERINFO_FUEL_CONSUMPTION", reqOil );
 		end
 
 		local buildType = pUnit:GetBuildType();			
@@ -1933,6 +1940,7 @@ function OnCombatEnd( m_AttackerPlayer,
         if( flag ~= nil ) 
         then
             flag:UpdateVisibility();
+			flag:UpdateTooltip();
         end
     end
     

@@ -63,6 +63,10 @@
 			<Text>Order the unit to recon the targeted area and engage enemy fighters.</Text>
 		</Replace>
 
+		<Replace Tag="TXT_KEY_MAP_OPTIONS_TRADE_ROUTES">
+			<Text>Supply Lines</Text>
+		</Replace>
+
 	</Language_en_US>
 
 	<!-- ++++++++++++++++++++++++++ -->
@@ -422,7 +426,10 @@
 			<Text>Requested reinforcements :[NEWLINE]{2_num} [ICON_MATERIEL] Materiel ({1_num}/HitPoint)[NEWLINE]{4_num} [ICON_PERSONNEL] Personnel ({3_num}/HitPoint)</Text>
 		</Row>
 		<Row Tag="TXT_KEY_HOVERINFO_OIL_CONSUMPTION">
-			<Text>Fuel Consumption per turn:[NEWLINE]{1_num} [ICON_RES_OIL] Oil</Text>
+			<Text>Oil Consumption: {1_num} [ICON_OIL]</Text>
+		</Row>
+		<Row Tag="TXT_KEY_HOVERINFO_FUEL_CONSUMPTION">
+			<Text>Fuel Consumption: {1_num} [ICON_FUEL]</Text>
 		</Row>
 		<Row Tag="TXT_KEY_HOVERINFO_FILLING_PERCENTAGE">
 			<Text>Stacking capacity: {1_num} % filled</Text>
@@ -435,6 +442,9 @@
 		</Row>
 		<Row Tag="TXT_KEY_HOVERINFO_FIRE_POINTS">
 			<Text>Fire points left: {1_num}</Text>
+		</Row>
+		<Row Tag="TXT_KEY_HOVERINFO_SUPPLY_EFFICIENCY">
+			<Text>Supply Line efficiency: {1_num}%</Text>
 		</Row>
 
 

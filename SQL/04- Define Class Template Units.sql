@@ -150,7 +150,7 @@ INSERT INTO Units (Type, Description, Civilopedia, Strategy, Help, Requirements,
 					 UnitFlagIconOffset, PortraitIndex, IconAtlas, UnitFlagAtlas, Materiel, Personnel, FuelConsumption, KeyName)
 	SELECT	'UNIT_' || UnitKey, Description, Civilopedia, Strategy, Help, Requirements,
 					 Combat, RangedCombat, Cost, Moves, Immobile, Range, BaseSightRange, Class, Special, Capture, CombatClass, Domain, CivilianAttackPriority, DefaultUnitAI, Food, NoBadGoodies, RivalTerritory, MilitarySupport, MilitaryProduction, Pillage, Found, FoundAbroad, CultureBombRadius, GoldenAgeTurns, IgnoreBuildingDefense, PrereqResources, Mechanized, Suicide, CaptureWhileEmbarked, PrereqTech, ObsoleteTech, GoodyHutUpgradeUnitClass, HurryCostModifier, AdvancedStartCost, MinAreaSize, AirUnitCap, NukeDamageLevel, WorkRate, NumFreeTechs, RushBuilding, BaseHurry, HurryMultiplier, BaseGold, NumGoldPerEra, SpreadReligion, CombatLimit, RangeAttackOnlyInDomain, RangeAttackIgnoreLOS, RangedCombatLimit, XPValueAttack, XPValueDefense, SpecialCargo, DomainCargo, Conscription, ExtraMaintenanceCost, NoMaintenance, Unhappiness,
-			'ART_DEF_UNIT_' || UnitKey, UnitArtInfoCulturalVariation, UnitArtInfoEraVariation, ProjectPrereq, SpaceshipProject, LeaderPromotion, LeaderExperience, DontShowYields, ShowInPedia, MoveRate, 
+			'ART_DEF_UNIT_' || UnitKey, UnitArtInfoCulturalVariation, UnitArtInfoEraVariation, 'PROJECT_' || UnitKey, SpaceshipProject, LeaderPromotion, LeaderExperience, DontShowYields, ShowInPedia, MoveRate, 
 					 UnitFlagIconOffset, PortraitIndex, IconAtlas, UnitFlagAtlas, Materiel, Personnel, FuelConsumption, UnitKey
 	FROM Units JOIN UnitConfiguration ON  (Type = 'UNIT_' || UnitConfiguration.Template);
 
@@ -361,6 +361,41 @@ UPDATE Units SET DefaultUnitAI = 'UNITAI_PARADROP' WHERE 'UNIT_PARATROOPER' = Ty
 
 -- Set Unit AI for Special Forces
 UPDATE Units SET DefaultUnitAI = 'UNITAI_PARADROP' WHERE 'SPECIAL_FORCES' = Type;
+
+
+-----------------------------------------------
+-- Fill Projects table 
+-----------------------------------------------
+
+-- Cost based on unit's cost and English text exist
+INSERT OR REPLACE INTO Projects (Type, Description, Help, Civilopedia, Strategy, MaxGlobalInstances, MaxTeamInstances, Cost, IconAtlas, PortraitIndex)
+	SELECT 'PROJECT_' || UnitKey, 'TXT_KEY_PROJECT_' || UnitKey, 'TXT_KEY_PROJECT_' || UnitKey || '_DESC', Units.Civilopedia, Units.Strategy, -1, 1, ROUND(Units.Cost*0.75), Units.IconAtlas, Units.PortraitIndex
+	FROM Units INNER JOIN UnitConfiguration ON (Units.Type = 'UNIT_' || UnitConfiguration.UnitKey AND UnitConfiguration.ProjCst ISNULL)
+	WHERE EXISTS (SELECT Tag FROM Language_en_US WHERE 'TXT_KEY_PROJECT_' || UnitConfiguration.UnitKey  = Tag);
+	
+-- Cost based on unit's cost and English text does not exist
+INSERT OR REPLACE INTO Projects (Type, Description, Help, Civilopedia, Strategy, MaxGlobalInstances, MaxTeamInstances, Cost, IconAtlas, PortraitIndex)
+	SELECT 'PROJECT_' || UnitKey, Units.Description || ' design', 'Allow the construction of ' || Units.Description || '.[NEWLINE]----------------[NEWLINE]{'|| Units.Help ||'}', Units.Civilopedia, Units.Strategy, -1, 1, ROUND(Units.Cost*0.75), Units.IconAtlas, Units.PortraitIndex
+	FROM Units INNER JOIN UnitConfiguration ON (Units.Type = 'UNIT_' || UnitConfiguration.UnitKey AND UnitConfiguration.ProjCst ISNULL)
+	WHERE NOT EXISTS (SELECT Tag FROM Language_en_US WHERE 'TXT_KEY_PROJECT_' || UnitConfiguration.UnitKey  = Tag);
+
+-- Specific cost factor and English text exist
+INSERT OR REPLACE INTO Projects (Type, Description, Help, Civilopedia, Strategy, MaxGlobalInstances, MaxTeamInstances, Cost, IconAtlas, PortraitIndex)
+	SELECT 'PROJECT_' || UnitKey, 'TXT_KEY_PROJECT_' || UnitKey, 'TXT_KEY_PROJECT_' || UnitKey || '_DESC', Units.Civilopedia, Units.Strategy, -1, 1, ROUND(Units.Cost*UnitConfiguration.ProjCst), Units.IconAtlas, Units.PortraitIndex
+	FROM Units INNER JOIN UnitConfiguration ON (Units.Type = 'UNIT_' || UnitConfiguration.UnitKey AND UnitConfiguration.ProjCst NOT NULL)
+	WHERE EXISTS (SELECT Tag FROM Language_en_US WHERE 'TXT_KEY_PROJECT_' || UnitConfiguration.UnitKey  = Tag);
+
+-- Specific cost factor and English text does not exist
+INSERT OR REPLACE INTO Projects (Type, Description, Help, Civilopedia, Strategy, MaxGlobalInstances, MaxTeamInstances, Cost, IconAtlas, PortraitIndex)
+	SELECT 'PROJECT_' || UnitKey, Units.Description || ' design', 'Allow the construction of ' || Units.Description || '.[NEWLINE]----------------[NEWLINE]{'|| Units.Help ||'}', Units.Civilopedia, Units.Strategy, -1, 1, ROUND(Units.Cost*UnitConfiguration.ProjCst), Units.IconAtlas, Units.PortraitIndex
+	FROM Units INNER JOIN UnitConfiguration ON (Units.Type = 'UNIT_' || UnitConfiguration.UnitKey AND UnitConfiguration.ProjCst NOT NULL)
+	WHERE NOT EXISTS (SELECT Tag FROM Language_en_US WHERE 'TXT_KEY_PROJECT_' || UnitConfiguration.UnitKey  = Tag);
+
+
+INSERT OR REPLACE INTO Project_Flavors (ProjectType, FlavorType, Flavor)
+	SELECT 'PROJECT_' || UnitKey, Unit_Flavors.FlavorType, Unit_Flavors.Flavor
+	FROM Unit_Flavors INNER JOIN UnitConfiguration ON Unit_Flavors.UnitType = 'UNIT_' || UnitConfiguration.UnitKey;
+
 
 -----------------------------------------------
 -- Clear UnitConfiguration for next step

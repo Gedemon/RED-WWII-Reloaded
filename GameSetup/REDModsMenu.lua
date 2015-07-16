@@ -267,7 +267,7 @@ function Initialize()
 	-- remove all DLC that are not required (for savegame compatibility)
 	local packageIDs = ContentManager.GetAllPackageIDs()
 	g_Packages = {}
-	
+	---[[
 	print("Active DLCs :")
 	for i, id in ipairs(packageIDs) do
 		
@@ -290,7 +290,7 @@ function Initialize()
 		end
     end	    
 	bNeedDLCUpdate = (#g_Packages > 0)
-
+	--]]
 
 	if not bMongolDlcActive then
 		print (" - Mongol DLC inactive, marked for activation...")
@@ -311,6 +311,7 @@ function Initialize()
 	local iNumUnauthorizedMods = 0
 
 	-- list mods
+	---[[
 	print("Active mods :")
 	local unsortedInstalledMods = Modding.GetInstalledMods()
 	for key, modInfo in pairs(unsortedInstalledMods) do
@@ -347,7 +348,7 @@ function Initialize()
 			end
 		end			
 	end
-
+	--]]
 		
 	print("- Initializing WWII background...")
 

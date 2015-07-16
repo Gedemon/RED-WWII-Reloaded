@@ -224,14 +224,15 @@ function UpdateWindow( city )
 
     Controls.Food:SetText( "[ICON_FOOD]" .. city:FoodDifference() );
     Controls.Production:SetText( "[ICON_PRODUCTION]" .. productionPerTurn );
-	
+	--[[
 	local cityPersonnel = GetCityPersonnel(city);
     Controls.Science:SetText( "[ICON_PERSONNEL]" ..  Round(cityPersonnel.total));
-
+	--]]
     Controls.Gold:SetText( "[ICON_GOLD]" .. city:GetYieldRate( YieldTypes.YIELD_GOLD ) );
-		
+	--[[
 	local cityMateriel = GetCityMateriel(city);
     Controls.Culture:SetText( "[ICON_MATERIEL]" .. Round(cityMateriel.total) );
+	--]]
     Controls.CityButton:SetVoids( city:GetX(), city:GetY() );
 
 	-- Yield (and Culture) Tooltips
@@ -245,11 +246,13 @@ function UpdateWindow( city )
 	local strGoldToolTip = GetGoldTooltip(city);
 	Controls.Gold:SetToolTipString(strGoldToolTip);
 	
+	--[[
 	local cityPersonnelTooltip = GetCityPersonnelTooltip(cityPersonnel)
 	Controls.Science:SetToolTipString(cityPersonnelTooltip);
 	
 	local cityPersonnelTooltip = GetCityMaterielTooltip(cityMateriel)
 	Controls.Culture:SetToolTipString(cityPersonnelTooltip);
+	--]]
    
 	local ourCiv = player:GetCivilizationType();
     local ourCivCiv = GameInfo.Civilizations[ourCiv];
@@ -275,15 +278,22 @@ function UpdateWindow( city )
  		local unitID = unit.ID;
  		if g_IsProductionMode then
  			-- test w/ visible (ie COULD train if ... )
-			--if city:CanTrain( unitID, 0, 1 ) then
+			if city:CanTrain( unitID, 0, 1 ) then
 			-- R.E.D.
 			-- show only if could be build
-			if city:CanTrain( unitID ) then
+			--if city:CanTrain( unitID ) then
 				local isDisabled = false;
+				local isProjectAvailable = false;
      			-- test w/o visible (ie can train right now)
-    			--if not city:CanTrain( unitID ) then
-    			--	isDisabled = true;
-				--end
+    			if not city:CanTrain( unitID ) then
+    				isDisabled = true;
+					if GameInfo.Units[unitID].ProjectPrereq then
+						local projectID = GameInfoTypes[GameInfo.Units[unitID].ProjectPrereq]
+						if city:CanCreate( projectID ) then
+							isProjectAvailable = true
+						end
+					end
+				end
 				
 				if (bGeneratingProduction) then
 					strTurnsLeft = Locale.ConvertTextKey( "TXT_KEY_STR_TURNS", city:GetUnitProductionTurnsLeft( unitID ));
@@ -291,8 +301,10 @@ function UpdateWindow( city )
 					strTurnsLeft = g_strInfiniteTurns;
 				end
 				
-				AddProductionButton( unitID, unit.Description, OrderTypes.ORDER_TRAIN, strTurnsLeft, 1, isDisabled );
-				numUnitButtons = numUnitButtons + 1;
+				if (not isDisabled) or (isDisabled and isProjectAvailable) then
+					AddProductionButton( unitID, unit.Description, OrderTypes.ORDER_TRAIN, strTurnsLeft, 1, isDisabled );
+					numUnitButtons = numUnitButtons + 1;
+				end
 			end
  		else
 			--if city:IsCanPurchase(true, unitID, -1, -1) then
